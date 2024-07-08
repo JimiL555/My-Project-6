@@ -1,4 +1,4 @@
-var apiKey = '7ac58449a473e1de5175cb512d47a950';
+var apiKey = '7ac58449a473e1de5175cb512d47a950';  
 var form = document.getElementById('city-form');
 var cityInput = document.getElementById('city-input');
 var currentWeatherDiv = document.getElementById('current-weather');
@@ -21,12 +21,14 @@ function fetchWeatherData(cityName) {
     console.log('Fetching weather data for URL:', url);  // Log the URL
     fetch(url)
         .then(function(response) {
+            console.log('Fetch response:', response);  // Log the response
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }
             return response.json();
         })
         .then(function(data) {
+            console.log('Weather data:', data);  // Log the data
             displayCurrentWeather(data);
             displayForecast(data);
         })
