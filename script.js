@@ -1,4 +1,4 @@
-var apiKey = 'YOUR_API_KEY_HERE';
+var apiKey = '7ac58449a473e1de5175cb512d47a950';
 var form = document.getElementById('city-form');
 var cityInput = document.getElementById('city-input');
 var currentWeatherDiv = document.getElementById('current-weather');
