@@ -1,6 +1,7 @@
 var apiKey = '7ac58449a473e1de5175cb512d47a950';  
 var form = document.getElementById('city-form');
 var cityInput = document.getElementById('city-input');
+var stateInput = document.getElementById('state-input');
 var currentWeatherDiv = document.getElementById('current-weather');
 var forecastDiv = document.getElementById('forecast');
 var searchHistoryDiv = document.getElementById('search-history');
@@ -8,16 +9,18 @@ var searchHistoryDiv = document.getElementById('search-history');
 form.addEventListener('submit', function(event) {
     event.preventDefault();
     var cityName = cityInput.value.trim();
-    if (cityName) {
-        fetchWeatherData(cityName);
-        saveSearchHistory(cityName);
+    var stateCode = stateInput.value.trim();
+    if (cityName && stateCode) {
+        fetchWeatherData(cityName, stateCode);
+        saveSearchHistory(cityName, stateCode);
         displaySearchHistory();
         cityInput.value = '';
+        stateInput.value = '';
     }
 });
 
-function fetchWeatherData(cityName) {
-    var url = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&appid=' + apiKey + '&units=metric';
+function fetchWeatherData(cityName, stateCode) {
+    var url = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityName + ',' + stateCode + ',US&appid=' + apiKey + '&units=metric';
     console.log('Fetching weather data for URL:', url);  // Log the URL
     fetch(url)
         .then(function(response) {
@@ -34,7 +37,7 @@ function fetchWeatherData(cityName) {
         })
         .catch(function(error) {
             console.error('Error fetching weather data:', error);
-            alert('Failed to fetch weather data. Please check the city name and try again.');
+            alert('Failed to fetch weather data. Please check the city name and state code, and try again.');
         });
 }
 
@@ -82,10 +85,11 @@ function displayForecast(data) {
     });
 }
 
-function saveSearchHistory(cityName) {
+function saveSearchHistory(cityName, stateCode) {
     var searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
-    if (!searchHistory.includes(cityName)) {
-        searchHistory.push(cityName);
+    var cityState = cityName + ', ' + stateCode;
+    if (!searchHistory.includes(cityState)) {
+        searchHistory.push(cityState);
         localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
     }
 }
@@ -93,11 +97,14 @@ function saveSearchHistory(cityName) {
 function displaySearchHistory() {
     var searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
     searchHistoryDiv.innerHTML = '';
-    searchHistory.forEach(function(city) {
+    searchHistory.forEach(function(cityState) {
         var cityButton = document.createElement('button');
-        cityButton.textContent = city;
+        cityButton.textContent = cityState;
         cityButton.addEventListener('click', function() {
-            fetchWeatherData(city);
+            var cityStateArray = cityState.split(', ');
+            var cityName = cityStateArray[0];
+            var stateCode = cityStateArray[1];
+            fetchWeatherData(cityName, stateCode);
         });
         searchHistoryDiv.appendChild(cityButton);
     });

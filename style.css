@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #864fe6;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -29,7 +29,7 @@ body {
 
 button {
     padding: 10px 20px;
-    background-color: #007BFF;
+    background-color: #40a4f4;
     color: #fff;
     border: none;
     border-radius: 5px;
