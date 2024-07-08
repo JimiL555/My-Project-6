@@ -18,8 +18,12 @@ form.addEventListener('submit', function(event) {
 
 function fetchWeatherData(cityName) {
     var url = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&appid=' + apiKey + '&units=metric';
+    console.log('Fetching weather data for URL:', url);  // Log the URL
     fetch(url)
         .then(function(response) {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
             return response.json();
         })
         .then(function(data) {
@@ -28,15 +32,21 @@ function fetchWeatherData(cityName) {
         })
         .catch(function(error) {
             console.error('Error fetching weather data:', error);
+            alert('Failed to fetch weather data. Please check the city name and try again.');
         });
 }
 
 function displayCurrentWeather(data) {
+    if (!data || !data.list || data.list.length === 0) {
+        console.error('No weather data available for current weather.');
+        return;
+    }
+
     var weather = data.list[0];
     var weatherHTML = `
         <div class="weather-card">
             <h2>${data.city.name} (${new Date(weather.dt * 1000).toLocaleDateString()})</h2>
-            <img src="http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" class="weather-icon" alt="${weather.weather[0].description}">
+            <img src="https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" class="weather-icon" alt="${weather.weather[0].description}">
             <p>Temp: ${weather.main.temp} °C</p>
             <p>Humidity: ${weather.main.humidity}%</p>
             <p>Wind: ${weather.wind.speed} m/s</p>
@@ -46,15 +56,21 @@ function displayCurrentWeather(data) {
 }
 
 function displayForecast(data) {
+    if (!data || !data.list || data.list.length === 0) {
+        console.error('No weather data available for forecast.');
+        return;
+    }
+
     forecastDiv.innerHTML = '';
     var forecastList = data.list.filter(function(_, index) {
         return index % 8 === 0;
     }).slice(1);
+
     forecastList.forEach(function(weather) {
         var weatherHTML = `
             <div class="weather-card">
                 <h3>${new Date(weather.dt * 1000).toLocaleDateString()}</h3>
-                <img src="http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" class="weather-icon" alt="${weather.weather[0].description}">
+                <img src="https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" class="weather-icon" alt="${weather.weather[0].description}">
                 <p>Temp: ${weather.main.temp} °C</p>
                 <p>Humidity: ${weather.main.humidity}%</p>
                 <p>Wind: ${weather.wind.speed} m/s</p>
