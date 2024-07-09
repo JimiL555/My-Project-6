@@ -73,7 +73,7 @@ function displayForecast(data) {
 
     forecastList.forEach(function(weather) {
         var weatherHTML = `
-            <div class="weather-card">
+            <div class="forecast-card">
                 <h3>${new Date(weather.dt * 1000).toLocaleDateString()}</h3>
                 <img src="https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" class="weather-icon" alt="${weather.weather[0].description}">
                 <p>Temp: ${weather.main.temp} °C</p>
