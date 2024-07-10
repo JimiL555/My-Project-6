@@ -1,9 +1,9 @@
-var apiKey = '7ac58449a473e1de5175cb512d47a950';  
+var apiKey = '7ac58449a473e1de5175cb512d47a950';  // Replace with your actual API key
 var form = document.getElementById('city-form');
 var cityInput = document.getElementById('city-input');
 var stateInput = document.getElementById('state-input');
 var currentWeatherDiv = document.getElementById('current-weather');
-var forecastDiv = document.getElementById('forecast');
+var forecastDiv = document.getElementById('forecast-cards');
 var searchHistoryDiv = document.getElementById('search-history');
 
 form.addEventListener('submit', function(event) {
@@ -36,7 +36,7 @@ function fetchWeatherData(cityName, stateCode) {
             displayForecast(data);
         })
         .catch(function(error) {
-            console.error('Error fetching weather data:', error);
+            console.error('Error fetching weather data:', error.message);
             alert('Failed to fetch weather data. Please check the city name and state code, and try again.');
         });
 }
@@ -50,11 +50,10 @@ function displayCurrentWeather(data) {
     var weather = data.list[0];
     var weatherHTML = `
         <div class="weather-card">
-            <h2>${data.city.name} (${new Date(weather.dt * 1000).toLocaleDateString()})</h2>
-            <img src="https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" class="weather-icon" alt="${weather.weather[0].description}">
+            <h2>${data.city.name} (${new Date(weather.dt * 1000).toLocaleDateString()}) <img src="https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" class="weather-icon" alt="${weather.weather[0].description}"></h2>
             <p>Temp: ${weather.main.temp} °C</p>
-            <p>Humidity: ${weather.main.humidity}%</p>
             <p>Wind: ${weather.wind.speed} m/s</p>
+            <p>Humidity: ${weather.main.humidity}%</p>
         </div>
     `;
     currentWeatherDiv.innerHTML = weatherHTML;
@@ -77,8 +76,8 @@ function displayForecast(data) {
                 <h3>${new Date(weather.dt * 1000).toLocaleDateString()}</h3>
                 <img src="https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" class="weather-icon" alt="${weather.weather[0].description}">
                 <p>Temp: ${weather.main.temp} °C</p>
-                <p>Humidity: ${weather.main.humidity}%</p>
                 <p>Wind: ${weather.wind.speed} m/s</p>
+                <p>Humidity: ${weather.main.humidity}%</p>
             </div>
         `;
         forecastDiv.innerHTML += weatherHTML;

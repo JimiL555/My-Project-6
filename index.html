@@ -8,14 +8,21 @@
 </head>
 <body>
     <div id="container">
-        <h1>Weather Dashboard</h1>
+        <header>
+            <h1>Weather Dashboard</h1>
+        </header>
         <form id="city-form">
             <input type="text" id="city-input" placeholder="Enter city name" required>
             <input type="text" id="state-input" placeholder="Enter state (e.g., NY)" required>
             <button type="submit">Search</button>
         </form>
-        <div id="current-weather"></div>
-        <div id="forecast"></div>
+        <div id="main-content">
+            <div id="current-weather"></div>
+            <div id="forecast">
+                <h2>5-Day Forecast:</h2>
+                <div id="forecast-cards"></div>
+            </div>
+        </div>
         <div id="search-history"></div>
     </div>
     <script src="script.js"></script>
